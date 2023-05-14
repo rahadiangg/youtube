@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: dashboard-external-virtualservice
+  namespace: belajar-istio
+spec:
+  hosts:
+  - sifood.belajar-istio.local # domain, umumnya diasamakan dengan hosts di Gateway
+  gateways:
+    - "dashboard-gateway" # nama Gateway yang diingikan
+  http:
+  - name: "dashboard-route"
+    route:
+    - destination:
+        host: dashboard.belajar-istio.svc.cluster.local # disarankan menggunakan format DNS full (FQDN)

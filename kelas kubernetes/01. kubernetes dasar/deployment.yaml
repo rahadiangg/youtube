@@ -1,0 +1,164 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aplikasi-nginx
+spec:
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: aplikasi-nginx
+  template:
+    metadata:
+      labels:
+        app: aplikasi-nginx
+    spec:
+      containers:
+      - name: aplikasi-nginx
+        image: nginx:1.22.1
+        resources:
+          limits:
+            memory: "10Mi"
+            cpu: "10m"
+        ports:
+        - containerPort: 80
+        env:
+          - name: DATABASE_PORT
+            value: "3306"
+          - name: DATABASE_USERNAME
+            value: "rahadiangg"
+          - name: DATABASE_PASSSWORD
+            valueFrom:
+              secretKeyRef:
+                name: config-applikasiku
+                key: DATABASE_PASSWORD
+          - name: TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: config-applikasiku-2
+                key: TOKEN_KEY
+
+          - name: PLAYER_INITIAL_LIVES 
+            valueFrom:
+              configMapKeyRef:
+                name: game-demo           
+                key: player_initial_lives 
+          - name: UI_PROPERTIES_FILE_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: game-demo
+                key: ui_properties_file_name
+
+        volumeMounts:
+          - name: konfig-ssh
+            mountPath: /var/secret/ssh
+            readOnly: true
+          - name: config-game
+            mountPath: "/config"
+            readOnly: true
+      
+      volumes:
+      - name: konfig-ssh
+        secret:
+          secretName: config-ssh
+      - name: config-game
+        configMap:
+          # Provide the name of the ConfigMap you want to mount.
+          name: game-demo
+          # An array of keys from the ConfigMap to create as files
+          items:
+          - key: "game.properties"
+            path: "game.properties"
+          - key: "user-interface.properties"
+            path: "user-interface.properties"
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-aplikasi-nginx
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: aplikasi-nginx
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 60
+
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: game-demo
+data:
+  # property-like keys; each key maps to a simple value
+  player_initial_lives: "3"
+  ui_properties_file_name: "user-interface.properties"
+
+  # file-like keys
+  game.properties: |
+    enemy.types=aliens,monsters
+    player.maximum-lives=5    
+  user-interface.properties: |
+    color.good=purple
+    color.bad=yellow
+    allow.textmode=true  
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: config-applikasiku-2
+type: Opaque
+data:
+  TOKEN_KEY: bWFudGFw
+       
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-ngix
+spec:
+  type: ClusterIP
+  selector:
+    app: aplikasi-nginx
+  ports:
+  - port: 8080
+    targetPort: 80
+    # nodePort: 30001
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-nginx
+  labels:
+    name: ingress-nginx
+spec:
+  rules:
+  - host: pecel-lele.info
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: service-ngix
+            port: 
+              number: 8080
+
+

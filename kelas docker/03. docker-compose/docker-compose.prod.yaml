@@ -1,0 +1,14 @@
+services:
+  nginx-1:
+    #config container
+    container_name: nginx-ku1
+    image: nginx:alpine #menggunakan image dengan tag alpine
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile.staging
+
+  nodejs:
+    container_name: node-ku
+    build:
+      context: ./docker/nodejs
+      dockerfile: Dockerfile.staging

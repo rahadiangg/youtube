@@ -1,0 +1,12 @@
+auth:
+  rootPassword: "mantapDjiwa"
+  database: "mantap_db"
+
+primary:
+  persistence:
+    size: 1Gi
+
+  resources:
+    limits:
+      cpu: 512m
+      memory: 512Mi

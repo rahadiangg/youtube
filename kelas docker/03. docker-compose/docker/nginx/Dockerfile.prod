@@ -1,0 +1,5 @@
+FROM nginx:alpine
+
+RUN apk add vim
+
+COPY . /usr/share/nginx/html/

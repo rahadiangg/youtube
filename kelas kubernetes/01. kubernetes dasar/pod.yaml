@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: aplikasi-nginx-new
+  labels:
+    name: aplikasi-nginx-new
+    stack: nodejs
+    version: 2.1.1
+  annotations:
+    description: Ini adalah aplikasi pertama saya yang di deploy di kubernetes
+  namespace: backend
+spec:
+  containers:
+  - name: aplikasi-nginx-new
+    image: nginx:alpine
+    resources:
+      limits:
+        memory: "10Mi"
+        cpu: "10m"
+    ports:
+      - containerPort: 80
