@@ -1,16 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: review-canary-2.0.0
+  name: review-canary-2.0.0 # nama deployment beda
   namespace: belajar-istio
 spec:
   selector:
     matchLabels:
-      app: review-canary-2.0.0
+      type: canary-2.0.0 #tambahan label canary
   template:
     metadata:
       labels:
-        app: review-canary-2.0.0
+        type: canary-2.0.0 # tambahan label canary
+        app: review # match dengan label service
         version: 2.0.0 # versi 2
     spec:
       containers:

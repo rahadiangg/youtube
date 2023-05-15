@@ -6,9 +6,9 @@ metadata:
 spec:
   host: review.belajar-istio.svc.cluster.local
   subsets:
-  - name: versi-1-0-0 # DNS-1123 label naming conventions
+  - name: v1 # DNS-1123 label naming conventions
     labels:
       version: 1.0.0
-  - name: versi-2-0-0 # DNS-1123 label naming conventions
+  - name: v2 # DNS-1123 label naming conventions
     labels:
       version: 2.0.0
