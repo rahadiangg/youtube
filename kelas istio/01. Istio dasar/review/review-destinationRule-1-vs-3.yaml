@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: review-destionationrule
+  namespace: belajar-istio
+spec:
+  host: review.belajar-istio.svc.cluster.local
+  subsets:
+  - name: v1 # DNS-1123 label naming conventions
+    labels:
+      version: 1.0.0
+  - name: v3 # DNS-1123 label naming conventions
+    labels:
+      version: 3.0.0

@@ -1,16 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: review
+  name: review-canary-3.0.0 # nama deployment beda
   namespace: belajar-istio
 spec:
   selector:
     matchLabels:
-      app: review
+      type: canary-3.0.0 #tambahan label canary
   template:
     metadata:
       labels:
-        app: review
+        type: canary-3.0.0 # tambahan label canary
+        app: review # match dengan label service
         version: 3.0.0 # versi 3
     spec:
       containers:
@@ -22,19 +23,4 @@ spec:
             cpu: "20m"
         ports:
         - containerPort: 8000
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: review
-  namespace: belajar-istio
-spec:
-  selector:
-    app: review
-  ports:
-  - port: 8000
-    targetPort: 8000
-    # untuk mendemokan Kiali dapat mengecek konfigurasi yang salah
-    name: http 
 

@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: review-virtualservice
+  namespace: belajar-istio
+spec:
+  hosts:
+  - review.belajar-istio.svc.cluster.local
+  http:
+  - name: "route canary"
+    route:
+    - destination:
+        host: review.belajar-istio.svc.cluster.local # disarankan menggunakan format DNS full (FQDN)
+        subset: v1
+      weight: 0 # persentase traffic
+    - destination:
+        host: review.belajar-istio.svc.cluster.local # disarankan menggunakan format DNS full (FQDN)
+        subset: v3
+      weight: 100 # persentase traffic
