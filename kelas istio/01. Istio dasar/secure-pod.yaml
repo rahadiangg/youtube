@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: secure-pod
+  namespace: belajar-istio
+spec:
+  selector:
+    matchLabels:
+      app: secure-pod
+  serviceName: secure-pod
+  template:
+    metadata:
+      labels:
+        app: secure-pod
+    spec:
+      containers:
+      - name: secure-pod
+        image: nicolaka/netshoot
+        command: ["tail",  "-f", "/dev/null"]

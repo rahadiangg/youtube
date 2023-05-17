@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns-tanpa-istio
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: legacy-pod
+  namespace: ns-tanpa-istio
+spec:
+  selector:
+    matchLabels:
+      app: legacy-pod
+  serviceName: legacy-pod
+  template:
+    metadata:
+      labels:
+        app: legacy-pod
+    spec:
+      containers:
+      - name: legacy-pod
+        image: nicolaka/netshoot
+        command: ["tail",  "-f", "/dev/null"]
