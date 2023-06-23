@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-private
+spec:
+  selector:
+    matchLabels:
+      app: nginx-private
+  template:
+    metadata:
+      labels:
+        app: nginx-private
+    spec:
+      imagePullSecrets:
+      - name: my-private-registry # sesuaikan dengan nama secret yang dibuat
+      containers:
+      - name: nginx-private
+        image: rahadiangg/nginx-private:alpine # gunakan private image kalian
+        resources:
+          limits:
+            memory: "10Mi"
+            cpu: "10m"
+        ports:
+        - containerPort: 80

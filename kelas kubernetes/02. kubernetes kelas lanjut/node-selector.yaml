@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-app
+spec:
+  selector:
+    matchLabels:
+      app: nginx-app
+  template:
+    metadata:
+      labels:
+        app: nginx-app
+    spec:
+      nodeSelector: # konfigurasi node selector
+        # sesuaikan label dengan node yang diinginkan
+        kubernetes.io/arch: arm64
+        kubernetes.io/os: linux
+      containers:
+      - name: nginx-app
+        image: nginx:alpine
+        resources:
+          limits:
+            memory: "10Mi"
+            cpu: "10m"
+        ports:
+        - containerPort: 80

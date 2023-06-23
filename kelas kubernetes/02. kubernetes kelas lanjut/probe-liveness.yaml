@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-app-liveness
+spec:
+  selector:
+    matchLabels:
+      app: example-app-liveness
+  template:
+    metadata:
+      labels:
+        app: example-app-liveness
+    spec:
+      containers:
+      - name: example-app-liveness
+
+        # pakai app khusus untuk demo
+        # 20 detik pertama container akan mereturn http code 200 (ok)
+        # setelah itu http code 500 (error)
+        image: rahadiangg/k8s-etc:liveness
+        env:
+          - name: THRESHOLD
+            value: "20"
+        resources:
+          limits:
+            memory: "10Mi"
+            cpu: "10m"
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 3 # tunggu 3 detik di awal sebelum melakukan probe yang pertama
+          failureThreshold: 3 # berapa banyak error/failure yang ditoleransi
+          periodSeconds: 3 # interval pengecekan
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: example-app-liveness
+spec:
+  selector:
+    app: example-app-liveness
+  ports:
+  - port: 8080
+    targetPort: 8080
+

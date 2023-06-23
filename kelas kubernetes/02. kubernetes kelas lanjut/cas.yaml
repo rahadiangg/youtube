@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-demo-cas
+spec:
+  selector:
+    matchLabels:
+      app: nginx-demo-cas
+  template:
+    metadata:
+      labels:
+        app: nginx-demo-cas
+    spec:
+      containers:
+      - name: nginx-demo-cas
+        image: nginx:alpine
+        resources:
+          limits:
+            memory: "1128Mi"
+            cpu: "1128m"
+          # sengaja requestnya besar agar mentrigger cluster auto scaler
+          requests:
+            memory: 1024Mi
+            cpu: 256m
+        ports:
+        - containerPort: 80

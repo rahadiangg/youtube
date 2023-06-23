@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-pending-state
+spec:
+  selector:
+    matchLabels:
+      app: nginx-pending-state
+  template:
+    metadata:
+      labels:
+        app: nginx-pending-state
+    spec:
+      containers:
+      - name: nginx-pending-state
+        image: nginx:alpine
+        resources:
+          limits:
+            memory: "10999Mi"
+            cpu: "10999m"
+          # sengaja requestnya besar agar pod pending
+          requests:
+            memory: 8000Mi
+            cpu: 8000m
+        ports:
+        - containerPort: 80

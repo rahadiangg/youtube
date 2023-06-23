@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mypv
+  labels:
+    name: mypv
+spec:
+  capacity:
+    storage: 3Gi
+  
+  # detail tentang AccessMdode dapat dilihat disini:
+  # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /volume/mypv
+  storageClassName: manual
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mypvc
+spec:
+  # storage class harus sama dengan PV yang mau di claim
+  storageClassName: manual
+
+  # gunakan selector untuk menentukan mau claim PV yang mana
+  selector:
+    matchLabels:
+      name: mypv
+  resources:
+    requests:
+      storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-pv-pvc
+spec:
+  selector:
+    matchLabels:
+      app: nginx-pv-pvc
+  template:
+    metadata:
+      labels:
+        app: nginx-pv-pvc
+    spec:
+
+      # panggil PVC di volumes
+      volumes:
+        - name: coba-volume
+          persistentVolumeClaim:
+            claimName: mypvc
+
+      containers:
+      - name: nginx-pv-pvc
+        image: nginx:alpine
+        resources:
+          limits:
+            memory: "10Mi"
+            cpu: "10m"
+        ports:
+          - containerPort: 80
+        # PVC yang sudah dipanggil di volumes, panggil disini untuk mengarahkan path di container
+        volumeMounts:
+          - mountPath: /usr/share/nginx/html
+            name: coba-volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-pv-pvc
+spec:
+  selector:
+    app: nginx-pv-pvc
+  ports:
+  - port: 80
+    targetPort: 80
+
+
+
+
+
