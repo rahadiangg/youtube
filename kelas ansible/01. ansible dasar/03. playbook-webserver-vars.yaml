@@ -1,0 +1,23 @@
+---
+- name: Playbook setup web server
+  hosts: server_belajar
+  become: true
+  vars: # mendefinisikan variable
+    user_app: ansibleweb
+  tasks:
+    - name: Install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+    - name: Buat user {{ user_app }}
+      ansible.builtin.user:
+        name: "{{ user_app }}"
+        password: belajaransible
+        shell: /bin/bash
+    - name: Copy file html
+      ansible.builtin.copy:
+        src: ./web/
+        dest: /var/www/html/
+        mode: '604'
+        owner: "{{ user_app }}"
+        group: "{{ user_app }}"

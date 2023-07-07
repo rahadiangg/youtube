@@ -1,0 +1,74 @@
+---
+- name: Playbook setup web server
+  hosts: server_belajar
+  become: true
+  gather_facts: true # defaultnya memang true
+  vars: # mendefinisikan variable
+    user_app: ansibleweb
+  tasks:
+
+    ## Install nginx
+    - name: Install nginx (Debian)
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+      when:
+        - ansible_os_family == "Debian"
+        - ansible_processor_cores >= 1 or ansible_memory_mb.real.total >= 512
+      tags:
+        - install
+    - name: Install nginx (Alpine)
+      community.general.apk:
+        name: nginx
+        state: present
+      when:
+        - ansible_os_family == "Alpine"
+        - ansible_processor_cores >= 1 or ansible_memory_mb.real.total >= 512
+      tags:
+        - install
+
+    ## Buat user
+    - name: Buat user (Debian) {{ user_app }}
+      ansible.builtin.user:
+        name: "{{ user_app }}"
+        password: belajaransible
+        shell: /bin/bash
+      when:
+        - ansible_os_family == "Debian"
+      tags:
+        - setup
+    - name: Buat user (Alpine) {{ user_app }}
+      ansible.builtin.user:
+        name: "{{ user_app }}"
+        password: belajaransible
+        shell: /bin/sh
+      when:
+        - ansible_os_family == "Alpine"
+      tags:
+        - setup
+
+    ## Copy file html
+    - name: Copy file html (Debian)
+      ansible.builtin.copy:
+        src: ./web/
+        dest: /var/www/html/
+        mode: '604'
+        owner: "{{ user_app }}"
+        group: "{{ user_app }}"
+      when:
+        - ansible_os_family == "Debian"
+      tags:
+        - setup
+        - copy_file
+    - name: Copy file html (Alpine)
+      ansible.builtin.copy:
+        src: ./web/
+        dest: /usr/share/nginx/html
+        mode: '604'
+        owner: "{{ user_app }}"
+        group: "{{ user_app }}"
+      when:
+        - ansible_os_family == "Alpine"
+      tags:
+        - setup
+        - copy_file

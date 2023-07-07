@@ -1,0 +1,7 @@
+inventory
+host
+ansible.cfg
+
+ssh-keys/
+**/*.pub
+**/*.key

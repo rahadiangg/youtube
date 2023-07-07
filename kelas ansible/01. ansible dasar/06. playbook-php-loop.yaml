@@ -1,0 +1,39 @@
+---
+- name: Playbook setup PHP
+  hosts: server_belajar
+  become: true
+  gather_facts: true # defaultnya memang true
+  vars:
+    taget_php_version: 8.2
+  tasks:
+    - name: Add repository for PHP
+      ansible.builtin.apt_repository:
+        repo: 'ppa:ondrej/php'
+        state: present
+      tags: prepare
+
+    - name: Update repo
+      ansible.builtin.apt:
+        update_cache: true
+      tags: prepare
+
+    - name: Install php {{ taget_php_version }}
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - php{{ taget_php_version }}
+        - php{{ taget_php_version }}-cli
+        - php{{ taget_php_version }}-common
+        - php{{ taget_php_version }}-imap
+        - php{{ taget_php_version }}-redis
+        - php{{ taget_php_version }}-xml
+        - php{{ taget_php_version }}-zip
+        - php{{ taget_php_version }}-mbstring
+        - php{{ taget_php_version }}-curl
+        - php{{ taget_php_version }}-gd
+        - php{{ taget_php_version }}-bcmath
+        - php{{ taget_php_version }}-gmp
+        - php{{ taget_php_version }}-mysqli
+      tags:
+        - install

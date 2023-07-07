@@ -1,0 +1,22 @@
+---
+- name: Playbook buat user baru
+  hosts: server_belajar
+  become: true
+  gather_facts: true # defaultnya memang true
+  vars: # mendefinisikan variable
+    user_app: userbaru
+  tasks:
+
+    - name: Parsing variable dari secret file
+      ansible.builtin.include_vars:
+        file: secret-userbaru.yaml
+
+    - name: Add new user
+      ansible.builtin.user:
+        name: "{{ user_app }}"
+        # password: belajaransible # gak secure kita ganti pake Ansible Vault
+
+        password: "{{ user_pass | password_hash('sha512') }}" # ambil value dari variable lalu lakukan hash
+        shell: /bin/bash
+      when:
+        - ansible_os_family == "Debian"

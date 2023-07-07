@@ -1,0 +1,7 @@
+[server_belajar]
+192.168.100.1
+server2.belajar.local
+
+[server_belajar:vars]
+ansible_user=rahadiangg
+ansible_ssh_private_key_file=./ssh-keys/belajar-ansible

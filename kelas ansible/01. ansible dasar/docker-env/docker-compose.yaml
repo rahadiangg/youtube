@@ -1,0 +1,13 @@
+services:
+  ubuntu-01:
+    container_name: ubuntu-01
+    build: .
+    ports:
+      - 2222:22
+    command: ["tail", "-f", "/dev/null"]
+  ubuntu-02:
+    container_name: ubuntu-02
+    build: .
+    ports:
+      - 2223:22
+    command: ["tail", "-f", "/dev/null"]

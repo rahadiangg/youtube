@@ -1,0 +1,17 @@
+---
+- name: Playbook setup web server
+  hosts: server_belajar
+  become: true
+  tasks:
+    - name: Update repository
+      ansible.builtin.apt:
+        update_cache: true
+    - name: Install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+    - name: Copy file html
+      ansible.builtin.copy:
+        src: ./web/
+        dest: /var/www/html/
+        mode: '604'
