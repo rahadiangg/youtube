@@ -9,9 +9,8 @@ variable "aws_secret_key" {
 // ==== EC2 ====
 variable "list_vm" {
   type    = list(string)
-  default = ["vm1", "vm2"]
 }
 
-variable "security_groups_names" {
-  type = set(string)
+variable "security_group_names" {
+  type = list(string)
 }
