@@ -1,0 +1,33 @@
+
+global:
+  scrape_interval: 5s
+
+  evaluation_interval: 3s # waktu interval evaluasi dari setiap rule monitoring
+
+scrape_configs:
+  - job_name: server-linux # Job
+    static_configs:
+      - targets:
+      # list instance
+        - "localhost:9100"
+  - job_name: server-linux-via-dns
+    dns_sd_configs:
+      - names:
+          - prom-target.rahadian.dev
+        type: A
+        port: 9100
+  - job_name: prometheus-itself
+    static_configs:
+      - targets:
+        - localhost:9090
+
+# konfigurasi rule monitoring
+rule_files:
+  - 'rule-cpu-50-percent.yml' # berupa file
+
+# jika sebuah rule terpenuhi maka akan mengirimakan alert ke Alertmanager
+alerting:
+  alertmanagers:
+    - static_configs:
+      - targets:
+          - 'localhost:9093'

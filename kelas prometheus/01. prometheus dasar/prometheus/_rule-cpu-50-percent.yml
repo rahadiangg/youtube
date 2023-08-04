@@ -1,0 +1,12 @@
+groups:
+  - name: semua server
+    rules:
+      - alert: CPU 50 persen
+        expr: ((sum by(instance) (irate(node_cpu_seconds_total{mode!="idle"}[15s])) / sum by (instance)((irate(node_cpu_seconds_total{}[15s])))) * 100) >= 50
+        for: 30s # kurun waktu untuk sebuah expresi dianggap valid
+        labels:
+          # label ini penting untuk mapping notifikasi di Alertmanager
+          severity: critical
+        annotations:
+          # berisi informasi dari sebuah alert
+          summary: CPU nyentuh 50% selama 30 detik terkahir gan!!!

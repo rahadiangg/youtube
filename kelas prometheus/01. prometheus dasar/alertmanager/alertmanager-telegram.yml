@@ -1,0 +1,29 @@
+
+global:
+  # waktu sebuah alert dari "firing" ditandai sebagai "resolve"
+  resolve_timeout: 1m
+
+route:
+  # wajib ada default receiver
+  receiver: default-telegram
+
+  # grouping
+  # detailnya akan kita bahas di materi lain secara terpisah
+  group_wait: 3s
+  group_interval: 20s
+  repeat_interval: 20s
+  group_by: [ alertname ]
+  
+  routes:
+    - matchers:
+        # jika ada alert yang mempunyai label ini,
+        # maka akan mengirikan notifikasi ke receiver
+        - severity="critical"
+      receiver: default-telegram
+
+# konfigurasi reciver telegram bot
+receivers:
+  - name: default-telegram
+    telegram_configs:
+      - bot_token: asdasdasdasdasdasdasdasd
+        chat_id: -1234567
