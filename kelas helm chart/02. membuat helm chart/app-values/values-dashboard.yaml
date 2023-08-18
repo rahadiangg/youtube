@@ -1,0 +1,33 @@
+# Default values for my-app-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: rahadiangg/demo-istio
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: dashboard-svc-1.0.0
+
+service:
+  type: ClusterIP
+  port: 3000
+
+resources:
+  limits:
+    cpu: 512m
+    memory: 512Mi
+  requests:
+    cpu: 128m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# env variable
+env:
+  PRODUCT_URI: "http://product.default:8000/products"
+  REVIEW_URI: "http://review.default:8000/reviews"
