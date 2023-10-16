@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: dashboard-gateway
+  namespace: default
+spec:
+  selector:
+    istio: ingressgateway # ingress gateway yang ingin digunakan, karena kita bisa punya beberapa ingress gateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "sifood.default.local" # domain name https://istio.io/latest/docs/reference/config/networking/gateway/#Server

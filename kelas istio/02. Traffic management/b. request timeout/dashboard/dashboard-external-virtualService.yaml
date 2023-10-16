@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: dashboard-external-virtualservice
+  namespace: default
+spec:
+  hosts:
+  - sifood.default.local 
+  gateways:
+    - "dashboard-gateway"
+  http:
+  - name: "dashboard-route"
+    route:
+    - destination:
+        host: dashboard.default.svc.cluster.local
+    timeout: 1s # timeout dashboard

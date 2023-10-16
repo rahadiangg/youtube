@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: dashboard-external-virtualservice
+  namespace: default
+spec:
+  hosts:
+  - istio.geprek-milenial.xyz # domain, umumnya diasamakan dengan hosts di Gateway
+  gateways:
+    - "istio-system/dashboard-gateway" # nama Gateway yang diingikan
+  http:
+  - name: "dashboard-route"
+    route:
+    - destination:
+        host: dashboard.default.svc.cluster.local
+        port:
+          number: 3000

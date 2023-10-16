@@ -1,0 +1,11 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: review-dr
+  namespace: default
+spec:
+  host: review.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      # https://istio.io/latest/docs/reference/config/networking/destination-rule/#LoadBalancerSettings-SimpleLB
+      simple: LEAST_REQUEST        

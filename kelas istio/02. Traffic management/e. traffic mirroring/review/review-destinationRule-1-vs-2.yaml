@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: review-dr
+  namespace: default
+spec:
+  host: review.default.svc.cluster.local
+  subsets:
+  - name: v1 # DNS-1123 label naming conventions
+    labels:
+      version: 1.0.0
+  - name: v2 # DNS-1123 label naming conventions
+    labels:
+      version: 2.0.0

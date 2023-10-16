@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: dashboard
+  template:
+    metadata:
+      labels:
+        app: dashboard
+        version: 1.0.0
+    spec:
+      containers:
+      - name: dashboard
+        image: rahadiangg/demo-istio:dashboard-svc-1.0.0
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "1000m"
+          requests:
+            memory: "100Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 3000
+        env:
+          - name: PRODUCT_URI
+            value: http://product.default:8000/products
+          - name: REVIEW_URI
+            value: http://review.default:8000/reviews
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard
+  namespace: default
+spec:
+  selector:
+    app: dashboard
+  ports:
+  - port: 3000
+    targetPort: 3000
+    name: http

@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: review-vs
+spec:
+  hosts:
+  - review.default.svc.cluster.local
+  http:
+  - fault:
+      delay:
+        percentage:
+          value: 50
+        fixedDelay: 10s
+    route:
+    - destination:
+        host: review.default.svc.cluster.local

@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: review-vs
+spec:
+  hosts:
+  - review.default.svc.cluster.local
+  http:
+    - route:
+      - destination:
+          host: review.default.svc.cluster.local
+      retries:
+        attempts: 1
+        # perTryTimeout: 2s
+        # retryOn: 5xx

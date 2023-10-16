@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: review-dr
+  namespace: default
+spec:
+  host: review.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      localityLbSetting:
+        distribute:
+          - from: ap-southeast-1/*
+            to:
+              "ap-southeast-1/ap-southeast-1b/*": 75
+              "ap-southeast-1/ap-southeast-1c/*": 25
