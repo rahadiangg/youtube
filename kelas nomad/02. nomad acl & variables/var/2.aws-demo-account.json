@@ -1,0 +1,8 @@
+{
+  "path": "/secret/aws/demo-account",
+  "namespace": "default",
+  "items": {
+    "ACCESS_KEY": "ini-adalah-access-key-demo",
+    "SECRET_KEY": "demooooooooooo"
+  }
+}
