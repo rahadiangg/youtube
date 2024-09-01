@@ -1,0 +1,5 @@
+aws_ak           = "ABCDEFG"
+aws_sk           = "12343434"
+nomad_server_1   = "192.168.1.20"
+nomad_region     = "indonesia"
+nomad_datacenter = "jkt-1"
